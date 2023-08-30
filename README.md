@@ -3,6 +3,7 @@
 WoolWars+ is a Minecraft Forge mod providing QOL features to the Hypixel gamemode WoolWars.
 
 <br>
+
 ## Features
  - Powerup holograms: These make the holograms above powerups clearer to read.
  - Team counter: Show the # of alive players on each team.
