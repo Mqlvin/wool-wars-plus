@@ -56,7 +56,12 @@ public class WWPConfig {
                 showNametagDistance = obj.get("showHolDistance").getAsBoolean();
                 showPlayerCount = obj.get("showSideCount").getAsBoolean();
                 playerCountPos = Position.valueOf(obj.get("sideCountPos").getAsString());
-            } catch (Exception ignoredAsValuesWithBeDefaulted) {}
+            } catch (Exception defaultValues) {
+                showItemNametags = true;
+                showNametagDistance = false;
+                playerCountPos = Position.TOP_MIDDLE;
+                showPlayerCount = true;
+            }
         }
     }
 
