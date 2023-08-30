@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wwplus",
+  "name": "WoolWars+",
+  "description": "A mod providing QOL features to the Hypixel gamemode WoolWars.",
+  "version": "${version}",
+  "mcversion": "1.8.9",
+  "url": "https://github.com/Mqlvin",
+  "updateUrl": "",
+  "authorList": ["Mqlvin"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
