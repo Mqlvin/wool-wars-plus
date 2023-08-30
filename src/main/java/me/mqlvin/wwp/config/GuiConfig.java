@@ -22,10 +22,10 @@ public class GuiConfig extends GuiScreen {
                 EnumChatFormatting.WHITE + "Show item distance: " + (WoolWarsPlus.getConfig().showNametagDistance() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")
         );
         GuiButton b_showSides = new GuiButton(0x03, width / 4 - 100, distanceTop + 95,
-                EnumChatFormatting.WHITE + "Show player side count: " + (WoolWarsPlus.getConfig().showPlayerCount() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")
+                EnumChatFormatting.WHITE + "Show team counts: " + (WoolWarsPlus.getConfig().showPlayerCount() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")
         );
         GuiButton b_sidesPosition = new GuiButton(0x04, width / 4 - 100, distanceTop + 118,
-                EnumChatFormatting.WHITE + "Current side count position: " + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + WoolWarsPlus.getConfig().getPlayerCountPos().getFormattedName()
+                EnumChatFormatting.WHITE + "Team count position: " + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + WoolWarsPlus.getConfig().getPlayerCountPos().getFormattedName()
         );
 
         this.buttonList.add(b_showHolograms);
@@ -57,11 +57,11 @@ public class GuiConfig extends GuiScreen {
         } else
         if(button.id == 0x03) {
             WoolWarsPlus.getConfig().toggleShowPlayerCount();
-            button.displayString = EnumChatFormatting.WHITE + "Show player side count: " + (WoolWarsPlus.getConfig().showPlayerCount() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+            button.displayString = EnumChatFormatting.WHITE + "Show team counts: " + (WoolWarsPlus.getConfig().showPlayerCount() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
         } else
         if(button.id == 0x04) {
             WoolWarsPlus.getConfig().scrollPlayerCountPos();
-            button.displayString = EnumChatFormatting.WHITE + "Side count position: " + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + WoolWarsPlus.getConfig().getPlayerCountPos().getFormattedName();
+            button.displayString = EnumChatFormatting.WHITE + "Team count position: " + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + WoolWarsPlus.getConfig().getPlayerCountPos().getFormattedName();
             WoolWarsPlus.getSideCount().updateRenderPosition();
         }
 
