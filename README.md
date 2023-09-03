@@ -18,5 +18,5 @@ If you would like to suggest features or add features, please make a issue/PR, o
 <br>
 
 ## Known bug/limitation/feature
-Currently, powerup holograms display by replacing the normal powerup text. However, sometimes even when powerup items are visible (e.g. the sword, armour, head) the nametag isn't visible due to render distance, so the powerup won't get a hologram. This means for some larger maps, you won't be able to see all holograms at once.
-Originally I was planning to fix this by detecting what the powerup item was (e.g. the floating sword, armour), however I realised that would make this mod more of a cheat than a QOL, as you can't see those floating items through walls, however my hologram would be visible through walls.
+My mod overrides Hypixel's default holograms. However this feature is limited to Hypixel's entity render distance, so not all holograms will be shown at once.
+The only way to fix this issue would be to render custom holograms based on the floating item (e.g. the sword/armour), but as you can't see these items through walls, this would be an unfair advantage.
