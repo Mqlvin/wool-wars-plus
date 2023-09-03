@@ -5,16 +5,12 @@ import me.mqlvin.wwp.config.GuiConfig;
 import me.mqlvin.wwp.config.WWPConfig;
 import me.mqlvin.wwp.feature.PowerupDisplay;
 import me.mqlvin.wwp.feature.SideCount;
-import me.mqlvin.wwp.util.ActiveGame;
-import me.mqlvin.wwp.util.WorldTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -25,10 +21,6 @@ public class WoolWarsPlus {
 
 
     public static WWPConfig config = new WWPConfig();
-
-    private static final WorldTracker worldTracker = new WorldTracker();
-
-    private static ActiveGame activeGame = null;
 
 
     private static final SideCount featureSD = new SideCount();
@@ -49,40 +41,19 @@ public class WoolWarsPlus {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(featurePD);
-        MinecraftForge.EVENT_BUS.register(getWorldTracker());
         MinecraftForge.EVENT_BUS.register(featureSD);
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOW) // we have to do ClientChatReceivedEvent as we have to wait for the locraw to come in
-    public void onPossibleLocraw(ClientChatReceivedEvent event) {
-        if(!getWorldTracker().inWoolWarsGame()) {
-            try {
-                MinecraftForge.EVENT_BUS.unregister(activeGame);
-            } catch(Exception ignored) {} // user hadn't played ww yet
-            activeGame = null;
-        } else {
-            activeGame = new ActiveGame();
-            MinecraftForge.EVENT_BUS.register(activeGame);
-        }
     }
 
     public static void showGui() {
         showGui = true;
     }
 
-    public static ActiveGame getActiveGame() {
-        return activeGame;
-    }
-
     public static WWPConfig getConfig() {
         return config;
     }
 
-    public static WorldTracker getWorldTracker() {
-        return worldTracker;
-    }
 
     @SubscribeEvent // checks if screen size has changed
     public void onTickCheckScreenSize(TickEvent.ClientTickEvent e){
