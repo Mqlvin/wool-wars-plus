@@ -56,19 +56,18 @@ public class WoolWarsPlus {
 
 
     @SubscribeEvent // checks if screen size has changed
-    public void onTickCheckScreenSize(TickEvent.ClientTickEvent e){
-        if(showGui) {
+    public void onTickCheckScreenSize(TickEvent.ClientTickEvent e) {
+        if (showGui) {
             showGui = false;
             Minecraft.getMinecraft().displayGuiScreen(new GuiConfig());
         }
 
-        if(lastScreenHeight != Minecraft.getMinecraft().displayHeight || lastScreenWidth != Minecraft.getMinecraft().displayWidth) {
+        if (lastScreenHeight != Minecraft.getMinecraft().displayHeight || lastScreenWidth != Minecraft.getMinecraft().displayWidth) {
             featureSD.updateRenderPosition();
         }
         lastScreenWidth = Minecraft.getMinecraft().displayWidth;
         lastScreenHeight = Minecraft.getMinecraft().displayHeight;
     }
-
 
 
     public static SideCount getSideCount() {

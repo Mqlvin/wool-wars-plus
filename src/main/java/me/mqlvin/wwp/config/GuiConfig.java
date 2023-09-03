@@ -47,19 +47,16 @@ public class GuiConfig extends GuiScreen {
 
     @Override
     public void actionPerformed(GuiButton button) {
-        if(button.id == 0x01) {
+        if (button.id == 0x01) {
             WoolWarsPlus.getConfig().toggleShowItemNametags();
             button.displayString = EnumChatFormatting.WHITE + "Show item holograms: " + (WoolWarsPlus.getConfig().showItemNametags() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-        } else
-        if(button.id == 0x02) {
+        } else if (button.id == 0x02) {
             WoolWarsPlus.getConfig().toggleShowNametagDistance();
             button.displayString = EnumChatFormatting.WHITE + "Show item distance: " + (WoolWarsPlus.getConfig().showNametagDistance() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-        } else
-        if(button.id == 0x03) {
+        } else if (button.id == 0x03) {
             WoolWarsPlus.getConfig().toggleShowPlayerCount();
             button.displayString = EnumChatFormatting.WHITE + "Show team counts: " + (WoolWarsPlus.getConfig().showPlayerCount() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-        } else
-        if(button.id == 0x04) {
+        } else if (button.id == 0x04) {
             WoolWarsPlus.getConfig().scrollPlayerCountPos();
             button.displayString = EnumChatFormatting.WHITE + "Team count position: " + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + WoolWarsPlus.getConfig().getPlayerCountPos().getFormattedName();
             WoolWarsPlus.getSideCount().updateRenderPosition();

@@ -22,7 +22,7 @@ public class WWPConfig {
     private boolean showPlayerCount;
 
     public WWPConfig() {
-        if(!configFile.exists()) {
+        if (!configFile.exists()) {
             showItemNametags = true;
             showNametagDistance = false;
             playerCountPos = Position.TOP_MIDDLE;
@@ -43,13 +43,13 @@ public class WWPConfig {
 
         try {
             FileUtils.writeStringToFile(configFile, obj.toString());
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void loadConfig() {
-        if(configFile.exists()) {
+        if (configFile.exists()) {
             try {
                 JsonObject obj = new JsonParser().parse(FileUtils.readFileToString(configFile)).getAsJsonObject();
                 showItemNametags = obj.get("showHol").getAsBoolean();
@@ -69,6 +69,7 @@ public class WWPConfig {
     public boolean showItemNametags() {
         return showItemNametags;
     }
+
     public boolean showNametagDistance() {
         return showNametagDistance;
     }
@@ -76,6 +77,7 @@ public class WWPConfig {
     public boolean showPlayerCount() {
         return this.showPlayerCount;
     }
+
     public Position getPlayerCountPos() {
         return this.playerCountPos;
     }
@@ -83,6 +85,7 @@ public class WWPConfig {
     public void toggleShowItemNametags() {
         this.showItemNametags = !this.showItemNametags;
     }
+
     public void toggleShowNametagDistance() {
         this.showNametagDistance = !this.showNametagDistance;
     }
@@ -90,17 +93,10 @@ public class WWPConfig {
     public void toggleShowPlayerCount() {
         this.showPlayerCount = !this.showPlayerCount;
     }
+
     public void scrollPlayerCountPos() {
         this.playerCountPos = this.playerCountPos.next();
     }
-
-
-
-
-
-
-
-
 
 
     public enum Position {
@@ -113,6 +109,7 @@ public class WWPConfig {
 
         private static final Position[] positions = values();
         private final String formattedName;
+
         Position(String formattedName) {
             this.formattedName = formattedName;
         }

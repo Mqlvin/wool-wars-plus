@@ -36,8 +36,8 @@ public class PowerupDisplay {
 
     @SubscribeEvent
     public void nametagRender(RenderLivingEvent.Specials.Pre event) {
-        if(!WoolWarsPlus.getConfig().showItemNametags()) return;
-        if(!POWERUP_FORMAT.containsKey(event.entity.getName())) return; // if it isn't a coloured hologram, ignore
+        if (!WoolWarsPlus.getConfig().showItemNametags()) return;
+        if (!POWERUP_FORMAT.containsKey(event.entity.getName())) return; // if it isn't a coloured hologram, ignore
 
         powerups.add(event.entity);
         event.setCanceled(true);

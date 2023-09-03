@@ -44,12 +44,12 @@ public class WaypointUtils {
          * @change `distSq` value and calculation to make nametag slightly larger.
          */
 
-        double distSq = x*x + y*y + z*z;
+        double distSq = x * x + y * y + z * z;
         double dist = Math.sqrt(distSq);
-        if(distSq > 100) {
-            x *= 10/dist;
-            y *= 10/dist;
-            z *= 10/dist;
+        if (distSq > 100) {
+            x *= 10 / dist;
+            y *= 10 / dist;
+            z *= 10 / dist;
         }
         GlStateManager.translate(x, y, z);
         GlStateManager.translate(0, viewer.getEyeHeight(), 0);
@@ -58,7 +58,7 @@ public class WaypointUtils {
          * @author change by @Mqlvin
          * @change only draw one nametag, with distance appended at the end.
          */
-        drawNametag(str + (showDist ? " " + EnumChatFormatting.GRAY + Math.round(dist)+"m" : ""));
+        drawNametag(str + (showDist ? " " + EnumChatFormatting.GRAY + Math.round(dist) + "m" : ""));
 
         GlStateManager.popMatrix();
         GlStateManager.disableLighting();
@@ -67,6 +67,7 @@ public class WaypointUtils {
     /**
      * Taken from NotEnoughUpdates under Creative Commons Attribution-NonCommercial 3.0
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE
+     *
      * @author Moulberry
      */
     public static void drawNametag(String str) {
