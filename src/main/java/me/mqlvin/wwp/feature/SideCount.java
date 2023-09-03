@@ -1,11 +1,11 @@
 package me.mqlvin.wwp.feature;
 
+import com.google.common.eventbus.Subscribe;
 import me.mqlvin.wwp.WoolWarsPlus;
 import me.mqlvin.wwp.util.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -37,21 +37,28 @@ public class SideCount {
 
     public void updateCount() {
         if(!roundActive) return;
-        List<String> sbLines = ScoreboardUtils.getSidebarScores(Minecraft.getMinecraft().theWorld.getScoreboard());
+        List<String> sbLines = ScoreboardUtils.getSidebarSuffixes(Minecraft.getMinecraft().theWorld.getScoreboard());
 
-        if(sbLines.size() != 14) { blueCount = 4; redCount = 4; return; }; // not the right scoreboard or time
+        if(sbLines.size() != 8) { return; }; // not the right scoreboard or time
 
         String possibleRedCount = sbLines.stream().filter(s -> s.contains("§c§r")).findFirst().orElse(null);
         String possibleBlueCount = sbLines.stream().filter(s -> s.contains("§9§r")).findFirst().orElse(null);
 
-        if(possibleRedCount == null || possibleBlueCount == null) { return; } // if lines aren't there return
+        if(possibleRedCount == null || possibleBlueCount == null) { redCount = 4; blueCount = 4; return; } // if lines aren't there return
 
         try {
-            possibleRedCount = possibleRedCount.substring(5); // football emoji - one char - removes emoji/colour code
-            possibleBlueCount = possibleBlueCount.substring(6); // basketball emoji - 2 chars - removes emoji/colour code
-            redCount = Integer.parseInt(String.valueOf(possibleRedCount.charAt(0)));
+            possibleRedCount = possibleRedCount.substring(4); // removes emoji/colour code
+            possibleBlueCount = possibleBlueCount.substring(4);
+            redCount = Integer.parseInt(String.valueOf(possibleRedCount.charAt(0))); // there is a trailing space at the end
             blueCount = Integer.parseInt(String.valueOf(possibleBlueCount.charAt(0)));
         } catch (Exception ignore) {}
+    }
+
+    @SubscribeEvent
+    public void onChat(ClientChatReceivedEvent event) {
+        if(event.message.getUnformattedText().startsWith(" ") && event.message.getUnformattedText().contains("Round")) {
+            blueCount = 4; redCount = 4;
+        }
     }
 
 
@@ -105,7 +112,7 @@ public class SideCount {
     }
 
     public boolean isInGame() {
-        List<String> sbLines = Minecraft.getMinecraft().theWorld.getScoreboard().getTeams().stream().map(ScorePlayerTeam::getColorPrefix).collect(Collectors.toList());
+        List<String> sbLines = ScoreboardUtils.getSidebarPrefixes(Minecraft.getMinecraft().theWorld.getScoreboard());
         List<String> info = sbLines.stream().filter(s -> s.contains("⬤") || s.equals("State: §ePre Rou") || s.equals("State: §eActive ")).collect(Collectors.toList());
 
         return info.size() == 3; // valid state, red/blue team rounds won indicator
