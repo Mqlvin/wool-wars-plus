@@ -1,18 +1,23 @@
 package me.mqlvin.wwp.feature;
 
 import me.mqlvin.wwp.WoolWarsPlus;
-import me.mqlvin.wwp.util.KillMessageUtils;
+import me.mqlvin.wwp.util.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SideCount {
     private int redCount = 4;
     private int blueCount = 4;
-    private boolean roundStarted = false;
+    private boolean roundActive = false;
 
     private static int renderX = 0;
     private static int renderY = 0;
@@ -21,47 +26,32 @@ public class SideCount {
 
     @SubscribeEvent
     public void render(RenderGameOverlayEvent.Text event) {
-        if(WoolWarsPlus.getActiveGame() == null) return;
-        if(!roundStarted || !WoolWarsPlus.getConfig().showPlayerCount()) return;
+        roundActive = isInGame();
+        if(!roundActive || !WoolWarsPlus.getConfig().showPlayerCount()) { return; }
+
+        updateCount();
 
         updateRenderPosition();
         render(redCount, blueCount);
     }
 
+    public void updateCount() {
+        if(!roundActive) return;
+        List<String> sbLines = ScoreboardUtils.getSidebarScores(Minecraft.getMinecraft().theWorld.getScoreboard());
 
-    @SubscribeEvent
-    public void onChat(ClientChatReceivedEvent event) {
-        if(event.type == 2 && event.message.getUnformattedText().startsWith("§e§lCENTER UNLOCKS IN") && !roundStarted) {
-            // first time in a round that game started
-            roundStarted = true;
+        if(sbLines.size() != 14) { blueCount = 4; redCount = 4; return; }; // not the right scoreboard or time
 
-            // for accurate info before round start
-            WoolWarsPlus.getActiveGame().calculateTeamPlayers();
-            resetCount();
-            return;
-        }
+        String possibleRedCount = sbLines.stream().filter(s -> s.contains("§c§r")).findFirst().orElse(null);
+        String possibleBlueCount = sbLines.stream().filter(s -> s.contains("§9§r")).findFirst().orElse(null);
 
-        if(event.type != 0 && !WoolWarsPlus.getWorldTracker().inWoolWarsGame()) return;
+        if(possibleRedCount == null || possibleBlueCount == null) { return; } // if lines aren't there return
 
-
-        // if round is starting or game ended
-        if(event.message.getUnformattedText().startsWith("   ") && event.message.getUnformattedText().contains("Round #")) {
-            roundStarted = false;
-
-            // wait for all players to reappear in tab
-            WoolWarsPlus.getActiveGame().calculateTeamPlayers();
-            resetCount(); // reset count here so it says 4 : 4 or whatever in the cage
-        }
-
-        if(!KillMessageUtils.isKillMessage(event.message.getFormattedText())) return;
-
-        if(event.message.getFormattedText().startsWith("§r§c")) redCount -= 1;
-        else blueCount -= 1;
-    }
-
-    public void resetCount() {
-        blueCount = WoolWarsPlus.getActiveGame().getPlayersOnBlue().size();
-        redCount = WoolWarsPlus.getActiveGame().getPlayersOnRed().size();
+        try {
+            possibleRedCount = possibleRedCount.substring(5); // football emoji - one char - removes emoji/colour code
+            possibleBlueCount = possibleBlueCount.substring(6); // basketball emoji - 2 chars - removes emoji/colour code
+            redCount = Integer.parseInt(String.valueOf(possibleRedCount.charAt(0)));
+            blueCount = Integer.parseInt(String.valueOf(possibleBlueCount.charAt(0)));
+        } catch (Exception ignore) {}
     }
 
 
@@ -112,5 +102,12 @@ public class SideCount {
         String score = EnumChatFormatting.RED.toString() + EnumChatFormatting.BOLD + r + EnumChatFormatting.GRAY + " : " + EnumChatFormatting.BLUE + EnumChatFormatting.BOLD + b;
 
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(score, renderX, renderY, 0xFFFFFFFF);
+    }
+
+    public boolean isInGame() {
+        List<String> sbLines = Minecraft.getMinecraft().theWorld.getScoreboard().getTeams().stream().map(ScorePlayerTeam::getColorPrefix).collect(Collectors.toList());
+        List<String> info = sbLines.stream().filter(s -> s.contains("⬤") || s.equals("State: §ePre Rou") || s.equals("State: §eActive ")).collect(Collectors.toList());
+
+        return info.size() == 3; // valid state, red/blue team rounds won indicator
     }
 }
